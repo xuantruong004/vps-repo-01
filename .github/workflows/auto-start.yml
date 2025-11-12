@@ -1,20 +1,24 @@
 name: Auto Start VPS
+
 on:
-  schedule:
   workflow_dispatch:
+  # Nu mun chy theo gi, b comment v chnh cron (UTC)
+  # schedule:
+  #   - cron: "17 * * * *"
+
+permissions:
+  contents: read
 
 jobs:
   auto-vps:
     runs-on: ubuntu-latest
     timeout-minutes: 50
     steps:
-    - uses: actions/checkout@v3
-    - name: Auto VPS Session
-      uses: mxschmitt/action-tmate@v3
-      with:
-        limit-access-to-actor: false
-        sudo: true
-    - name: Keep Alive (Optional)
-      run: |
-        echo "VPS is running..."
-        echo "Started at: $(date)"
+      - uses: actions/checkout@v4
+      - name: Simulate work (20-40m)
+        run: |
+          python - <<'PY'
+          import random, time
+          t = random.randint(20*60, 40*60)
+          time.sleep(t)
+          PY
